@@ -4,11 +4,14 @@ import connectDB from './config/db.js';
 import { createClient } from 'redis';
 import userRoutes from './routes/user.js';
 import {connectRabbitMQ} from './config/rabbitmq.js';
+
 dotenv.config();
+
+
 
 connectDB();
 connectRabbitMQ();
-const redisClient = createClient(
+export const redisClient = createClient(
   { url: process.env.REDIS_URL || 'redis://localhost:6379' }
 );
 
@@ -22,6 +25,7 @@ redisClient.connect().then(()=>{
 
 
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 3000;
 
 

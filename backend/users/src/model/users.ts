@@ -17,4 +17,4 @@ const schema : Schema<IUsers > = new Schema({
     }
 })
 
-export const Users = mongoose.model<IUsers>("User", schema);
+export const User = mongoose.model<IUsers>("User", schema);

@@ -22,12 +22,6 @@ services:
       - "3000:3000"
     env_file:
       - ./users/.env
-    environment:
-      - MONGO_URI=mongodb://mongo:mongo_pass@mongo:27017/usersdb?authSource=admin
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_PORT=5672
-      - RABBITMQ_USER=rabbit
-      - RABBITMQ_PASS=rabbit_pass
     volumes:
       - ./users:/server
       - /server/node_modules
@@ -68,6 +62,24 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  mail:
+    build:
+      context: ./mail
+      dockerfile: Dockerfile
+    depends_on:
+       rabbitmq:
+         condition: service_healthy
+    env_file:
+      - ./mail/.env
+    ports:
+      - "3001:3001"
+  
+    volumes:
+      - ./mail:/server
+      - /server/node_modules
+    restart: unless-stopped
+    command: npm run dev
 
 volumes:
   mongo-data:

@@ -1,10 +1,8 @@
 import express from "express";
-
+import { loginUser, verfiyUser } from "../controller/user.js";
 const router = express.Router();
 
-// Sample route
-router.get("/user", (req, res) => {
-  res.send("User Service is running");
-});
+router.post("/login", loginUser);
+router.post("/verify", verfiyUser);
 
 export default router;
