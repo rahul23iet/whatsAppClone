@@ -52,4 +52,4 @@ export const verfiyUser = TryCatch(async (req, res, next) => {
         user,
         token
     });
-})
+});
