@@ -28,6 +28,25 @@ services:
     restart: unless-stopped
     command: npm run dev
 
+  chat:
+    build:
+      context: ./chat
+      dockerfile: Dockerfile
+    depends_on:
+       mongo:
+         condition: service_started
+       rabbitmq:
+         condition: service_healthy
+    ports:
+      - "3002:3000"
+    env_file:
+      - ./chat/.env
+    volumes:
+      - ./chat:/server
+      - /server/node_modules
+    restart: unless-stopped
+    command: npm run dev
+
   mongo-express:
     image: mongo-express:1.0.0
     restart: unless-stopped
