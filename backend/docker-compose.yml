@@ -19,7 +19,7 @@ services:
        rabbitmq:
          condition: service_healthy
     ports:
-      - "3000:3000"
+      - "5000:5000"
     env_file:
       - ./users/.env
     volumes:
@@ -38,7 +38,7 @@ services:
        rabbitmq:
          condition: service_healthy
     ports:
-      - "3002:3000"
+      - "3002:3002"
     env_file:
       - ./chat/.env
     volumes:

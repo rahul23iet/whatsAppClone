@@ -9,9 +9,10 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 connectDB();
-app.use("/api/v1", chatRoutes);
+console.log("Connected to MongoDB====>>>");
+app.use("/api/v1", chatRoutes );
 
 
 app.listen(process.env.PORT || 3002, () => {
-  console.log(`Chat service is running on port ${process.env.PORT || 3002}`);
+  console.log(`Chat service is running on port =>${process.env.PORT}`);
 });

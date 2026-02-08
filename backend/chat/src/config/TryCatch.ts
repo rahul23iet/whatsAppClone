@@ -4,6 +4,7 @@ const TryCatch = (handler: RequestHandler): RequestHandler => {
         try {
             await handler(req, res, next);
         } catch (error) {
+            console.error("Error in TryCatch middleware:*********");
             const message = error instanceof Error ? error.message : 'Internal Server Error';
             res.status(500).json({ message });
             next(error);
