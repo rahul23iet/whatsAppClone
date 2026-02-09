@@ -60,6 +60,7 @@ export default function LoginPage() {
                             {
                                 loading?<div className="flex items-center justify-center gap-2">
                                     <Loader2 className="w-5 h-5" />
+                                    Sending Otp to your mail...
                                 </div>: <div className="flex items-center justify-center gap-2">
                             <span>Send Verification Code</span>
                             <ArrowRight size={20} className="shrink-0" />
