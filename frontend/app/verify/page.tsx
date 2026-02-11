@@ -1,8 +1,8 @@
 "use client"
 import React , { useState,useRef, useEffect }from "react"
-import {Lock, Loader2,ArrowRight} from "lucide-react"
+import {Lock, Loader2,ArrowRight, ChevronLeft} from "lucide-react"
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import {useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -11,11 +11,11 @@ export default function  VerfiyPage() {
     const [otp, setOtp ] = useState(["","","","","",""]);
     const [error, setError] = useState<string>("");
     const [resendLoading, setResendLoading]=useState(false);
-    const [timer ,setTimer] = useState(60);
+    const [timer ,setTimer] = useState(300);
  
      const inputRefs=useRef<Array<HTMLInputElement| null>>([]);
     
-    //  const router = useRouter();
+      const router = useRouter();
     
      useEffect(()=>{
         if(timer>0){
@@ -59,6 +59,23 @@ export default function  VerfiyPage() {
     }
    }
 
+   const handleResendOtp = async ()=>{
+    setResendLoading(true);
+    setError("");
+    try{
+     const { data } = await axios.post(`http://localhost:5000/api/v1/login`,{
+        email,
+     })
+     alert(data.message);
+     setTimer(300);
+    }
+    catch(error:any){
+       setError(error.response.data.message);
+    }
+    finally{
+        setResendLoading(false);
+    }
+   }
 
     const searchParams = useSearchParams();
     const email:string = searchParams.get('email')||" ";
@@ -72,7 +89,7 @@ export default function  VerfiyPage() {
          setError("");
          setLoading(true);
          try{
-                const {data } = await axios.post("http://users:5000/api/v1/verify",{
+                const {data } = await axios.post("http://localhost:5000/api/v1/verify",{
                     email,
                     otp: otpString
                 })
@@ -86,7 +103,8 @@ export default function  VerfiyPage() {
                 inputRefs.current[0]?.focus();
          }
          catch(error:any){
-            setError(error.response.data.message);
+            console.log("========>>>>>", error.response?.data?.message);
+            setError(error?.response?.data?.message);
          }
          finally{
             setLoading(false);
@@ -96,7 +114,13 @@ export default function  VerfiyPage() {
        <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
           <div className="w-full max-w-lg ">
             <div className="bg-gray-800 border border-gray-700 rounded-lg  p-3">
-                <div className="text-center">
+                <div className="text-center mb-8 relative">
+                    <button className="absolute top-0 left-0 p-2 text-gray-300 hover:text-white" onClick={()=> router.push('login')}>
+                        <ChevronLeft className="w-6 h-6"/>
+
+
+                    </button>
+
                     <div className="mx-auto w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center mb-6">
                         <Lock size={40} className="text-white" />
                     </div>
@@ -161,7 +185,7 @@ export default function  VerfiyPage() {
                 <div className="mt-6 text-center">
                     <p className="text-gray-400 text-sm mb-4">Din't Receive the code ? </p>
                     {
-                        timer>0? <p className="text-gray-400 text-sm">Resend Code in {timer} seconds</p>:<button className="text-blue-400 hover:text-blue-300 font-medium text-sm disabled:opacity-50" disabled={resendLoading}>{resendLoading?"sending...":"Resend code"}</button>
+                        timer>0? <p className="text-gray-400 text-sm">Resend Code in {timer} seconds</p>:<button className="text-blue-400 hover:text-blue-300 font-medium text-sm disabled:opacity-50" disabled={resendLoading} onClick={handleResendOtp}>{resendLoading?"sending...":"Resend code"}</button>
                     }
                 </div>
             </div>

@@ -32,10 +32,12 @@ export const loginUser = TryCatch(async (req, res, next) => {
 
 
 export const verfiyUser = TryCatch(async (req, res, next) => {
+    console.log("*************")
     const { email, otp: enteredOtp } = req.body;
     const otpKey = `otp:${email}`;
     const storedOtp = await redisClient.get(otpKey);
 
+    console.log("=======>>>>>", storedOtp, "=====>>>", enteredOtp);
     if (!storedOtp || storedOtp != enteredOtp) {
         res.status(400).json({ message: "Invalid OTP" });
         return;
