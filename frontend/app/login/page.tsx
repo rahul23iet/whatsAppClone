@@ -3,29 +3,36 @@ import { Mail, ArrowRight ,Loader2} from "lucide-react";
 import React,{useReducer, useState} from "react";
 import {useRouter } from "next/navigation";
 import axios from 'axios'
+import { useAppData, user_service } from "../context/AppContext";
+import Loading from "../components/Loading";
 
 export default function LoginPage() {
     const [email, setEmail]= useState<string>("");
+    const {isAuth, loading:userLoading} = useAppData();
     const [loading , setLoading] = useState<boolean>(false);
     const router = useRouter();
     const handleSubmit= async(e: React.FormEvent<HTMLElement>): Promise<void> =>{
         e.preventDefault();
         setLoading(true);
         try{
-           const {data} = await axios.post('http://localhost:5000/api/v1/login' , {
+           const {data} = await axios.post(`${user_service}/api/v1/login` , {
             email,
            })
-           console.log("====>>>data", data);
            router.push(`/verify?email=${email}`)
         }
         catch(error:any){
-            console.log("===errrorrrrrr", error);
           alert(error?.response?.data?.message);
         }
         finally{
             setLoading(false);
         }
-    }
+    };
+    if(userLoading){
+        return <Loading />;
+     }
+     if(isAuth){
+        router.push("/chat");
+     }
 
     return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
