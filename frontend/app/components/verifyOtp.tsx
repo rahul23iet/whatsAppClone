@@ -7,13 +7,14 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useAppData, user_service } from "../context/AppContext";
 import Loading from "./Loading";
+import toast from "react-hot-toast";
 export default function  VerfiyOtp() {
-   const {setUser, setIsAuth, isAuth, loading: userLoading} = useAppData();
+   const {setUser, setIsAuth, isAuth, loading: userLoading,fetchChats, fetchUsers} = useAppData();
     const [loading, setLoading] = useState(false);
     const [otp, setOtp ] = useState(["","","","","",""]);
     const [error, setError] = useState<string>("");
     const [resendLoading, setResendLoading]=useState(false);
-    const [timer ,setTimer] = useState(300);
+    const [timer ,setTimer] = useState(300);  
  
      const inputRefs=useRef<Array<HTMLInputElement| null>>([]);
     
@@ -68,7 +69,8 @@ export default function  VerfiyOtp() {
      const { data } = await axios.post(`http://localhost:5000/api/v1/login`,{
         email,
      })
-     alert(data.message);
+     toast.success(data?.message || "Otp resent to your email");
+     //alert(data.message);
      setTimer(300);
     }
     catch(error:any){
@@ -95,7 +97,8 @@ export default function  VerfiyOtp() {
                     email,
                     otp: otpString
                 })
-                alert(data.message)
+                toast.success(data?.message || "Otp verified successfully");
+               // alert(data.message)
                 Cookies.set("token", data.token,{
                     expires:15,
                     secure:false,
@@ -105,6 +108,10 @@ export default function  VerfiyOtp() {
                 inputRefs.current[0]?.focus();
                 setUser(data.user);
                 setIsAuth(true);
+                fetchChats();
+                fetchUsers();
+                router.push("/chat"); 
+
          }
          catch(error:any){
             console.log("========>>>>>", error.response?.data?.message);

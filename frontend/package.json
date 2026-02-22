@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
-    "axios": "^1.13.4",
+    "axios": "^1.13.5",
+    "cors": "^2.8.6",
     "framer-motion": "^12.33.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.563.0",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/cors": "^2.8.19",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

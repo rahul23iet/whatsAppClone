@@ -5,6 +5,7 @@ import {useRouter } from "next/navigation";
 import axios from 'axios'
 import { useAppData, user_service } from "../context/AppContext";
 import Loading from "../components/Loading";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
     const [email, setEmail]= useState<string>("");
@@ -18,10 +19,12 @@ export default function LoginPage() {
            const {data} = await axios.post(`${user_service}/api/v1/login` , {
             email,
            })
+           toast.success(data?.message || "Otp sent to your email");
            router.push(`/verify?email=${email}`)
         }
         catch(error:any){
-          alert(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message || "Something went wrong");
+          //alert(error?.response?.data?.message);
         }
         finally{
             setLoading(false);
