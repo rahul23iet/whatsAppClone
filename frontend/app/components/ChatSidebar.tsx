@@ -134,8 +134,23 @@ const ChatSidebar = ({
                                                 <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center"   
                                                 >
                                                     <UserCircle className="w-7 h-7 text-gray-300" />
+                                                    {/* online user ka work hai*/}
+
                                                 </div>
                                             </div>
+
+                                             <div className="flex-1 min-w-0">
+                                                <div className='flex items-center justify-between mb-1'> 
+                                                    <span className={`font-semibold truncate ${isSelected ? 'text-white' : 'text-gray-300'}`}>{chat.user.name}</span>
+                                                    {
+                                                        unseenCount > 0 && (
+                                                            <div className="bg-red-600 text-white text-xs font-bold rounded-full min-w-[22px] h-5.5 flex items-center justify-center px-2">
+                                                                {unseenCount>99 ? '99+' : unseenCount}
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
+                                               </div>
                                         </div>
 
                                     </button>
