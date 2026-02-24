@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { User } from '../context/AppContext';
-import { MessageCircle, Plus, Search, UserCircle, X } from "lucide-react";
+import { CornerDownRight, CornerUpLeft, MessageCircle, Plus, Search, UserCircle, X } from "lucide-react";
 interface ChatSidebarProps {
 
 
@@ -150,6 +150,12 @@ const ChatSidebar = ({
                                                         )
                                                     }
                                                 </div>
+                                                {
+                                                    latestMessage && <div className='flex items-center gap-2'>
+                                                      {isSentByMe ? <CornerUpLeft size={14} className="text-blue-400 text-shrink-0" /> : <CornerDownRight size={14} className="text-green-400 text-shrink-0" />}
+                                                      <span className="text-sm text-gray-400 truncate flex-1">{latestMessage.text}</span>
+                                                    </div>
+                                                }
                                                </div>
                                         </div>
 
@@ -158,7 +164,13 @@ const ChatSidebar = ({
                             }
                             </div>
                         ) :
-                            (<div></div>)
+                            (<div className="flex flex-col items-center justify-center h-full text-center">
+                                <div>
+                                    <MessageCircle className='w-8 h-8 text-gray-400' />
+                                </div>
+                                <p className='text-gray-400 font-medium'>No conversations yet</p>
+                                <p className="text-sm text-gray-50 mt-1">Start a new Chat to begin messaging</p>
+                            </div>)
                     )}
             </div>
 
