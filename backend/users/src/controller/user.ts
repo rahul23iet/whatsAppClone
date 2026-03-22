@@ -9,22 +9,27 @@ export const loginUser = TryCatch(async (req, res, next) => {
     const { email } = req.body;
     const rateLimitKey = `otp:ratelimit:${email}`;
     const rateLimit = await redisClient.get(rateLimitKey);
+
+    console.log("Rate limit check:====>>>>", rateLimit);
     if (rateLimit) {
         res.status(429).json({ message: "Too many requests. Please try again later." });
         return;
     }
 
+    console.log("Generating OTP for email:====>>>>", email);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpKey = `otp:${email}`;
 
     await redisClient.set(otpKey, otp, { EX: 300 });
     await redisClient.set(rateLimitKey, 'true', { EX: 60 });
 
+    console.log("Generated OTP:====>>>>", otp);
     const message = {
         to: email,
         subject: 'Your OTP Code',
         body: `Your OTP code is ${otp}. It is valid for 5 minutes.`
     }
+    console.log("Publishing message to queue:====>>>>", message);
     await publishToQueue('sent-otp', JSON.stringify(message));
     res.status(200).json({ message: "User logged in successfully" });
 });

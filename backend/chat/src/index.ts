@@ -5,9 +5,8 @@ import connectDB from "./config/db.js";
 import chatRoutes from "./routes/chat.js";
 const app = express();
 dotenv.config();
-
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 connectDB();
 console.log("Connected to MongoDB====>>>");
 app.use("/api/v1", chatRoutes );
